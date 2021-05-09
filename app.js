@@ -8,7 +8,7 @@ const uuid = require("uuid").v4;
 const open = require("open")
 const multer = require("multer");
 const youtube = require("youtube-api");
-const credential = require("./Credentials.json")
+const credential = require("./Credentials1.json")
 
 app.use(cors());
 app.use(express.json());
@@ -48,34 +48,37 @@ app.get("/success", (req, res) => {
     const { title, description, filename } = JSON.parse(req.query.state)
 
     oAuth.getToken(req.query.code, async (err, tokens) => {
-        if (err) {
-            console.log(err);
-            return
-        }
-        oAuth.setCredentials(tokens)
+        try {
+            if (err) throw err
 
-        const file = path.join(__dirname, "videos", filename)
+            oAuth.setCredentials(tokens)
 
-        const response = await youtube.videos.insert({
-            resource: {
-                snippet: { title, description },
-                status: { privacyStatus: 'private' }
-            },
-            part: 'snippet, status',
-            media: {
-                body: fs.createReadStream(file)
+            const file = path.join(__dirname, "videos", filename)
+
+            const response = await youtube.videos.insert({
+                resource: {
+                    snippet: { title, description },
+                    status: { privacyStatus: 'private' }
+                },
+                part: 'snippet, status',
+                media: {
+                    body: fs.createReadStream(file)
+                }
+            })
+            if (response.status !== 200) {
+                res.redirect("http://localhost:3000");
             }
-        })
-        if (response.status !== 200) {
+            const youtubeLink = `https://youtu.be/${response.data.id}`;
+            res.redirect(url.format({
+                pathname: "http://localhost:3000/success",
+                query: {
+                    url: youtubeLink
+                }
+            }));
+        } catch (e) {
+            console.log(e);
             res.redirect("http://localhost:3000");
         }
-        const youtubeLink = `https://youtu.be/${response.data.id}`;
-        res.redirect(url.format({
-            pathname: "http://localhost:3000/success",
-            query: {
-                url: youtubeLink
-            }
-        }));
     })
 })
 
