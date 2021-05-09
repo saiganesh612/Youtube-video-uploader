@@ -1,0 +1,8 @@
+/node_modules
+
+# Youtube credentials
+/Credentials.json
+/Credentials1.json
+
+# Ignore videos folder
+/videos
