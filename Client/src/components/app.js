@@ -30,12 +30,12 @@ const App = () => {
     }
 
     return (
-        <div className="container d-flex justify-content-center align-items-center flex-column" style={{ height: '100vh' }}>
+        <div className="container d-flex justify-content-center align-items-center flex-column my-4" style={{ height: '100vh' }}>
 
             <div className="row">
-                <div className="col-8 offset-2 alert alert-warning" style={{ borderRadius: '1em' }}>
+                <div className="col-8 offset-2 alert alert-info" style={{ borderRadius: '1em' }}>
                     <p style={{ marginBottom: 0 }}>
-                        <i className="fas fa-exclamation-triangle" /> &nbsp;
+                        <i className="fas fa-info-circle"></i> &nbsp;
                         Time taken to upload the video to your Youtube Channel depends on the size
                         of the video that you are giving as input.
                     </p>
